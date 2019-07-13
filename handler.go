@@ -16,15 +16,17 @@ func Handler(c echo.Context) error {
 	}
 	if strings.HasPrefix(path, "https://mp.weixin.qq.com/s/"){
 		path = path[len("https://mp.weixin.qq.com/s/"):]
+	}else if strings.HasPrefix(path, "https:/mp.weixin.qq.com/s/"){ // for apache
+		path = path[len("https:/mp.weixin.qq.com/s/"):]
 	}else if strings.HasPrefix(path, "mp.weixin.qq.com/s/"){
 		path = path[len("mp.weixin.qq.com/s/"):]
 	}else if strings.HasPrefix(path, "s/"){
 		path = path[len("s/"):]
 	}
-
 	fullURL := "https://mp.weixin.qq.com/s/"+path
 
 	// referer 301
+	// println(r.Header.Get("User-Agent"))
 	if ! strings.Contains(r.Referer(), "TwitterBot"){
 		return c.Redirect(http.StatusFound, fullURL)
 	}
@@ -35,11 +37,11 @@ func Handler(c echo.Context) error {
 <head>
 <meta charset="utf-8">
 <meta name="generator" content="wx.su.sg">
-<meta property="og:title" content="{{.Title}}">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:type" content="website">
+<meta property="og:title" content="{{.Title}}">
 <meta property="og:description" content="{{.Summary}}">
-<meta property="og:url" itemprop="url" content="{{.Url}}">
+<meta property="og:url" itemprop="url" content="https://wx.su.sg/{{.Url}}">
 <meta property="og:site_name" content="{{.Author}}">
 <meta property="og:image" content="{{.FirstImg}}">
 </head>

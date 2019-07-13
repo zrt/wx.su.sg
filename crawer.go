@@ -64,7 +64,7 @@ func ParseArticle(url string) *Article {
     if len(images) > 0{
         article.FirstImg = images[0]
     }else{
-        article.FirstImg = ""
+        article.FirstImg = "https://lepuslab.com/wp-content/uploads/2019/07/wechat.png"
     }
 
     return article
