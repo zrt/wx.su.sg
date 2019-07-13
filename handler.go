@@ -1,34 +1,34 @@
 package main
 
 import (
-	"net/http"
-	"github.com/labstack/echo"
-	"strings"
 	"bytes"
+	"github.com/labstack/echo"
 	"html/template"
+	"net/http"
+	"strings"
 )
 
 func Handler(c echo.Context) error {
-    
+
 	r := c.Request()
 	path := r.URL.Path[1:]
-	if path == "favicon.ico"{
+	if path == "favicon.ico" {
 		return echo.NewHTTPError(http.StatusNotFound)
 	}
-	if strings.HasPrefix(path, "https://mp.weixin.qq.com/s/"){
+	if strings.HasPrefix(path, "https://mp.weixin.qq.com/s/") {
 		path = path[len("https://mp.weixin.qq.com/s/"):]
-	}else if strings.HasPrefix(path, "https:/mp.weixin.qq.com/s/"){ // for apache
+	} else if strings.HasPrefix(path, "https:/mp.weixin.qq.com/s/") { // for apache
 		path = path[len("https:/mp.weixin.qq.com/s/"):]
-	}else if strings.HasPrefix(path, "mp.weixin.qq.com/s/"){
+	} else if strings.HasPrefix(path, "mp.weixin.qq.com/s/") {
 		path = path[len("mp.weixin.qq.com/s/"):]
-	}else if strings.HasPrefix(path, "s/"){
+	} else if strings.HasPrefix(path, "s/") {
 		path = path[len("s/"):]
 	}
-	fullURL := "https://mp.weixin.qq.com/s/"+path
+	fullURL := "https://mp.weixin.qq.com/s/" + path
 
 	// referer 301
 	// println()
-	if ! strings.Contains(r.Header.Get("User-Agent"), "TwitterBot"){
+	if !strings.Contains(r.Header.Get("User-Agent"), "TwitterBot") {
 		return c.Redirect(http.StatusFound, fullURL)
 	}
 
@@ -55,21 +55,21 @@ window.location.href="{{.Url}}";
 </html>
 {{end}}
 `)
-	if err != nil{
+	if err != nil {
 		return err
 	}
-	
+
 	article := SafeParseArticle(fullURL)
-	if article == nil{
+	if article == nil {
 		return echo.NewHTTPError(http.StatusNotFound)
 	}
-	article.Summary = strings.ReplaceAll(article.Summary, "\r","")
+	article.Summary = strings.ReplaceAll(article.Summary, "\r", "")
 	for strings.Contains(article.Summary, "\n\n") {
-		article.Summary = strings.ReplaceAll(article.Summary, "\n\n","\n")
+		article.Summary = strings.ReplaceAll(article.Summary, "\n\n", "\n")
 	}
 	var buff bytes.Buffer
 	err = t.ExecuteTemplate(&buff, "T", article)
-	if err != nil{
+	if err != nil {
 		return err
 	}
 	return c.HTML(http.StatusOK, buff.String())

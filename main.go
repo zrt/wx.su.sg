@@ -1,15 +1,14 @@
 package main
 
 import (
-	"log"
 	"fmt"
+	"log"
 
-	"net/http"
 	"github.com/labstack/echo"
+	"net/http"
 )
 
 // ua TelegramBot (like TwitterBot)
-
 
 func main() {
 
@@ -25,8 +24,7 @@ func main() {
 
 	e.Logger.Fatal(e.Start("127.0.0.1:7233"))
 
-
 	article := ParseArticle("https://mp.weixin.qq.com/s/mVN0QGRuAjkkahJh9SBmbw")
 	log.Println(article.Title, article.Summary)
-	fmt.Printf("%#v\n",article)
+	fmt.Printf("%#v\n", article)
 }
