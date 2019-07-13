@@ -26,8 +26,8 @@ func Handler(c echo.Context) error {
 	fullURL := "https://mp.weixin.qq.com/s/"+path
 
 	// referer 301
-	// println(r.Header.Get("User-Agent"))
-	if ! strings.Contains(r.Referer(), "TwitterBot"){
+	// println()
+	if ! strings.Contains(r.Header.Get("User-Agent"), "TwitterBot"){
 		return c.Redirect(http.StatusFound, fullURL)
 	}
 
