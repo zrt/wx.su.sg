@@ -19,6 +19,17 @@ type Article struct {
     FirstImg    string   `json:"firstimg`
 }
 
+func SafeParseArticle(url string) *Article {
+    ret := (*Article)(nil)
+    defer func(){
+        if err := recover(); err!= nil{
+            ret = (*Article)(nil)
+        }
+    }()
+    ret = ParseArticle(url)
+    return ret
+}
+
 func ParseArticle(url string) *Article {
     resp, err := http.Get(url)
     if err != nil {

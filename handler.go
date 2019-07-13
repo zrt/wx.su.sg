@@ -9,6 +9,7 @@ import (
 )
 
 func Handler(c echo.Context) error {
+    
 	r := c.Request()
 	path := r.URL.Path[1:]
 	if path == "favicon.ico"{
@@ -57,7 +58,8 @@ window.location.href="{{.Url}}";
 	if err != nil{
 		return err
 	}
-	article := ParseArticle(fullURL)
+	
+	article := SafeParseArticle(fullURL)
 	if article == nil{
 		return echo.NewHTTPError(http.StatusNotFound)
 	}
