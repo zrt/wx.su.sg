@@ -24,7 +24,4 @@ func main() {
 
 	e.Logger.Fatal(e.Start("127.0.0.1:7233"))
 
-	article := ParseArticle("https://mp.weixin.qq.com/s/mVN0QGRuAjkkahJh9SBmbw")
-	log.Println(article.Title, article.Summary)
-	fmt.Printf("%#v\n", article)
 }
